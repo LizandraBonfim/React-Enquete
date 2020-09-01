@@ -1,0 +1,5 @@
+{
+    "*.{ts, tsx}": [
+        "yarn run test:staged"
+    ]
+}
