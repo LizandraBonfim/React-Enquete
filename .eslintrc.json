@@ -1,5 +1,16 @@
 {
-    "extends": "standard-with-typescript",
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
+    },
+    "extends": [
+        "standard-with-typescript",
+        "plugin:react/recommended"
+    ],
+    "plugins": [
+        "react"
+    ],
     "parserOptions": {
         "project": "./tsconfig.json"
     },
@@ -8,6 +19,8 @@
         "@typescript-eslint/consistent-type-definitions": "off",
         "@typescript-eslint/comma-spacing": "off",
         "@typescript-eslint/return-await": "off",
-        "@typescript-eslint/restrict-template-expressions": "off"
+        "@typescript-eslint/restrict-template-expressions": "off",
+        "react/jsx-uses-react": "error",
+        "react/jsx-uses-vars": "error"
     }
 }

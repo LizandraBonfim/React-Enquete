@@ -1,0 +1,11 @@
+.errorWrap{
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+
+    .error{
+        margin-top: 1rem;
+        color: tomato;
+    }
+    
+}

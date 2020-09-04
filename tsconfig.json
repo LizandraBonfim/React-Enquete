@@ -1,28 +1,30 @@
 {
     "compilerOptions": {
-        "target": "es5",
-        "module": "commonjs",
-        "outDir": "./dist",
-        "rootDir": "./src",
-        "strict": true,
-        "strictPropertyInitialization": false,
-        "baseUrl": "./src",
-        "allowJs": true,
+        "target": "es6",
+        "lib": [
+            "dom",
+            "dom.iterable",
+            "esnext"
+        ],
+        "esModuleInterop": true,
+        "module": "esnext",
+        "moduleResolution": "node",
+        "jsx": "react",
+        "rootDir": "src",
+        "baseUrl": "src",
         "paths": {
-            "@modules/*": [
-                "modules/*"
-            ],
-            "@config/*": [
-                "config/*"
-            ],
-            "@shared/*": [
-                "shared/*"
+            "@/*": [
+                "*"
             ]
         },
-        "esModuleInterop": true,
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true,
-        "skipLibCheck": true,
-        "forceConsistentCasingInFileNames": true
-    }
+        "allowJs": true,
+        "resolveJsonModule": true
+    },
+    "include": [
+        "src",
+        "./src/ts/**/*"
+    ],
+    "exclude": [
+        "src/main/test/cypress"
+    ]
 }

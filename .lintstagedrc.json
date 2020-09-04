@@ -1,5 +1,3 @@
 {
-    "*.{ts, tsx}": [
-        "yarn run test:staged"
-    ]
+    "*.{ts, tsx}": []
 }
