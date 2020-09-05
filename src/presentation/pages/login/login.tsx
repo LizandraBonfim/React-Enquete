@@ -8,43 +8,77 @@ import {
 import Context from '@/presentation/contexts/form/form-context'
 import Styles from './login-styles.scss';
 import { Validation } from '@/presentation/protocols/validation';
+import { Authentication } from '@/domain/usecases';
+import { count } from 'console';
 
 type Props = {
     validation: Validation
+    authentication: Authentication
 }
 
 
-
-const Login: React.FC<Props> = ({ validation }: Props) => {
+const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
     const [state, setState] = useState({
         isLoading: false,
         email: '',
         password: '',
-        emailError: 'Campo obrigatorio',
-        passwordError: 'Campo obrigatorio',
+        emailError: '',
+        passwordError: '',
         mainError: ''
     });
 
     useEffect(() => {
-        validation.validate({ email: state.email })
-    }, [state.email])
 
-    useEffect(() => {
-        validation.validate({ password: state.password })
-    }, [state.password])
+        setState({
+            ...state,
+            emailError: validation.validate('email', state.email),
+            passwordError: validation.validate('password', state.password)
+        })
+
+    }, [state.email, state.password]);
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
+        event.preventDefault();
+
+        try {
+
+            if (state.isLoading || state.emailError || state.passwordError) {
+                return;
+            }
+            setState({ ...state, isLoading: true });
+
+            const account = await authentication.auth({
+                email: state.email,
+                password: state.password
+            });
+
+            localStorage.setItem('accessToken', account.accessToken)
+        } catch (error) {
+            setState({
+                ...state,
+                isLoading: false,
+                mainError: error.message
+            });
+
+        }
+    }
+
 
     return (
         <div className={Styles.login}>
             <LoginHeader />
             <Context.Provider value={{ state, setState }}>
-                <form action="" className={Styles.form}>
+                <form data-testid="form" onSubmit={handleSubmit} className={Styles.form}>
                     <h2>Login</h2>
 
 
                     <Input type="email" name="email" placeholder="Digite seu e-mail" />
                     <Input type="password" name="password" placeholder="Digite sua senha" />
 
-                    <button data-testid="submit" disabled className={Styles.submit} type="submit">Entrar</button>
+                    <button
+                        data-testid="submit"
+                        disabled={!!state.emailError || !!state.passwordError}
+                        className={Styles.submit} type="submit">Entrar</button>
 
                     <span className={Styles.link}>Criar Conta</span>
                     <FormStatus />
