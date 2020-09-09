@@ -2,7 +2,7 @@ import faker from 'faker';
 import axios from 'axios';
 import { AxiosHttpClient } from "./axios.http.client";
 import { HttpPostParams } from '@/data/protocols/http';
-import { mockAxios } from '@/infra/test';
+import { mockAxios, mockHttpResponse } from '@/infra/test';
 import { mockPostRequest } from '@/data/test';
 
 
@@ -34,6 +34,16 @@ describe('AxiosHttpClient ', () => {
 
     test('should  call axios with correct statusCode and body', () => {
         const { sut, mockedAxios } = makeSut();
+        const promise = sut.post(mockPostRequest());
+
+        expect(promise).toEqual(mockedAxios.post.mock.results[0].value);
+    });
+
+    test('should  call axios with correct statusCode and body on failure', () => {
+        const { sut, mockedAxios } = makeSut();
+        mockedAxios.post.mockRejectedValueOnce({
+            response: mockHttpResponse()
+        })
         const promise = sut.post(mockPostRequest());
 
         expect(promise).toEqual(mockedAxios.post.mock.results[0].value);
